@@ -1,0 +1,288 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>码易支付演示</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="http://cnd.cos.eruyi.cn/jquery.min.js"></script>
+<style>
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #F2F3F5;
+  display: grid;
+  place-items: center;
+  padding: 80px 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.signup {
+  padding: 80px 60px;
+  background-color: white;
+  border-radius: 30px;
+  width: 100%;
+  max-width: 800px;
+}
+.signup-heading {
+  text-align: center;
+  font-weight: 600;
+  color: #363A40;
+  font-size: 35px;
+  margin-bottom: 35px;
+}
+.signup-google {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  width: 100%;
+  border-radius: 16px;
+  background-color: #4C6EF4;
+  text-decoration: none;
+  padding: 8px;
+  margin-bottom: 45px;
+  box-shadow: 0 10px 20px -5px rgba(76, 110, 244, 0.9);
+}
+.signup-google-icon {
+  width: 50px;
+  height: 50px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  color: #ff7870;
+  border-radius: 10px;
+  background-color: white;
+  font-size: 25px;
+}
+.signup-google-text {
+  color: white;
+  font-weight: 500;
+  display: block;
+  margin: 0 auto;
+}
+.signup-or {
+  color: #363A40;
+  display: block;
+  text-align: center;
+  position: relative;
+  margin-bottom: 55px;
+}
+.signup-or-text {
+  display: inline-block;
+  padding: 5px 20px;
+  background-color: white;
+  position: relative;
+  font-size: 14px;
+}
+.signup-or:before {
+  content: "";
+  height: 1px;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  background-color: #999;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.signup-already {
+  text-align: center;
+  color: #363A40;
+  font-size: 13px;
+}
+.signup-already-link {
+  color: #4C6EF4;
+  text-decoration: none;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-label {
+  display: inline-block;
+  cursor: pointer;
+  color: #363A40;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  border: 0;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  background-color: #F2F3F5;
+  color: #363A40;
+  font-size: 16px;
+}
+.form-input::-webkit-input-placeholder {
+  color: #B4BDC1;
+}
+
+.form-submit {
+  display: block;
+  margin-top: 45px;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border: 0;
+  border-radius: 15px;
+  background-color: #0fbf1c;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 20px -5px rgb(29 201 66 / 90%);
+  outline: none;
+}
+
+.ali-submit {
+  background-color: #4C6EF4;
+  box-shadow: 0 10px 20px -5px rgb(76 110 244 / 90%);
+}
+
+.mt-2{
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 767px) {
+  .signup {
+    padding: 30px 20px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="signup">
+	<h1 class="signup-heading">支付演示</h1>
+	<form action="javscript:voi(0);" class="signup-form" autocomplete="off">
+		<div class="form-group">
+            <label for="name" class="form-label">订单号</label>
+            <input type="text" class="form-input" id="out_trade_no" placeholder="订单号" value="">
+        </div>
+        <div class="form-group">
+            <label for="name" class="form-label">商品名称</label>
+            <input type="text" class="form-input" id="name" placeholder="商品名称" value="一瓶矿泉水">
+        </div>
+        <div class="form-group">
+            <label for="email" class="form-label">商品金额</label>
+            <input type="number" class="form-input" id="money" placeholder="商品金额" value="2">
+        </div>
+        
+        <button type="submit" class="form-submit ali-submit" id="submit_ali">支付宝</button>
+        <button type="submit" class="form-submit mt-2" id="submit_wx">微信</button>
+	</form>
+	<p class="signup-already"> 一句代码接入 <a href="#" class="signup-already-link">码易支付</a></p>
+</div>
+
+<script type="text/javascript" src="http://cnd.cos.eruyi.cn/coco-message.js"></script>
+<script>
+    document.getElementById("out_trade_no").value=randomNumber();
+    $("#submit_ali").click(function() {//修改认证信息
+        document.getElementById("out_trade_no").value=randomNumber();
+		var name = $("#name").val();
+		var out_trade_no = $("#out_trade_no").val();
+		var money = $("#money").val();
+		
+		document.getElementById("submit_ali").disabled=true;
+        document.getElementById("submit_ali").innerHTML="请求中...";
+		
+		$.ajax({
+			cache: false,
+			type: "POST",//请求的方式
+			url : "pay.php",//请求的文件名
+			data : {out_trade_no,name,money,type:'ali'},
+			dataType : 'json',
+			success : function(data) {
+				document.getElementById("submit_ali").disabled=false;
+				document.getElementById("submit_ali").innerHTML="支付宝";
+				if(data.code == 200){
+                    example(200,data.msg);
+					window.open(data.data);
+				}else{
+				    example(201,data.msg);
+				}
+			}
+		});
+		return false;//重要语句：如果是像a链接那种有href属性注册的点击事件，可以阻止它跳转。
+	});
+	
+	$("#submit_wx").click(function() {//修改认证信息
+        document.getElementById("out_trade_no").value=randomNumber();
+		var name = $("#name").val();
+		var out_trade_no = $("#out_trade_no").val();
+		var money = $("#money").val();
+		
+		document.getElementById("submit_wx").disabled=true;
+        document.getElementById("submit_wx").innerHTML="请求中...";
+		
+		$.ajax({
+			cache: false,
+			type: "POST",//请求的方式
+			url : "pay.php",//请求的文件名
+			data : {out_trade_no,name,money,type:'wx'},
+			dataType : 'json',
+			success : function(data) {
+				document.getElementById("submit_wx").disabled=false;
+				document.getElementById("submit_wx").innerHTML="微信";
+				if(data.code == 200){
+                    example(200,data.msg);
+					window.open(data.data);
+				}else{
+				    example(201,data.msg);
+				}
+			}
+		});
+		return false;//重要语句：如果是像a链接那种有href属性注册的点击事件，可以阻止它跳转。
+	});
+    
+    function setTimeDateFmt(s) {  // 个位数补齐十位数
+      return s < 10 ? '0' + s : s;
+    }
+    
+    function randomNumber() {
+      const now = new Date()
+      let month = now.getMonth() + 1
+      let day = now.getDate()
+      let hour = now.getHours()
+      let minutes = now.getMinutes()
+      let seconds = now.getSeconds()
+      month = setTimeDateFmt(month)
+      day = setTimeDateFmt(day)
+      hour = setTimeDateFmt(hour)
+      minutes = setTimeDateFmt(minutes)
+      seconds = setTimeDateFmt(seconds)
+      let orderCode = now.getFullYear().toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 10000)).toString();
+      console.log(orderCode)
+      return orderCode;
+    }
+
+    function example(n,msg) {
+        switch (n) {
+          case 200:
+            cocoMessage.success(msg,3000);
+            break;
+          case 201:
+            cocoMessage.error(msg, 3000);
+            break;
+
+          default:
+            break;
+        }
+      }
+</script>
+
+</body>
+</html>
